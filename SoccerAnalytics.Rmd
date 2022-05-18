@@ -166,7 +166,8 @@ eventos %>%
 coordenadas <- eventos %>% filter(playerId == 14723 & eventName == 'Pass') %>% select(Y_init, X_init)
 ggplot(coordenadas)   + 
   annotate_pitch(colour = "white" , fill = "#7fc47f", limits = FALSE) + theme_pitch() + 
-  geom_point(aes(x = X_init, y = Y_init, color="#005CAB", fill = "#005CAB"), alpha = 0.65, show.legend = F)
+  geom_point(aes(x = X_init, y = Y_init, color="#005CAB", fill = "#005CAB"), alpha = 0.65, show.legend = F) +
+  direction_label() 
 ```
 
 
@@ -184,7 +185,8 @@ ggplot(coordenadas)   +
 coordenadas <- eventos %>% filter(playerId == 8287 & eventName == 'Pass') %>% select(Y_init, X_init)
 ggplot(coordenadas)   + 
   annotate_pitch(colour = "white" , fill = "#7fc47f", limits = FALSE) + theme_pitch() + 
-  geom_point(aes(x = X_init, y = Y_init, color="#005CAB", fill = "#005CAB"), alpha = 0.65, show.legend = F)
+  geom_point(aes(x = X_init, y = Y_init, color="#005CAB", fill = "#005CAB"), alpha = 0.65, show.legend = F) +
+  direction_label() 
 ```
 
 <br> </br>
@@ -203,7 +205,8 @@ coordenadas <- eventos %>% filter(playerId == 40756 & eventName == 'Pass') %>% s
 ggplot(coordenadas)   + 
   annotate_pitch(colour = "white" , fill = "#7fc47f", limits = FALSE, dimensions = pitch_wyscout) + 
   theme_pitch() +
-  geom_point(aes(x = X_init, y = Y_init, color="#005CAB", fill = "#005CAB"), alpha = 0.65, show.legend = F)
+  geom_point(aes(x = X_init, y = Y_init, color="#005CAB", fill = "#005CAB"), alpha = 0.65, show.legend = F) +
+  direction_label() 
 
 ```
 <br> </br>
