@@ -1,0 +1,97 @@
+---
+title: "Data Storytelling: Soccer Analytics"
+author: "Victor H. Ayala Sánchez"
+date: "17/5/2022"
+output: 
+ html_document:
+    toc: true
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Soccer Analytics
+
+La data utilizada en el presente conjunto de visualizaciones  fue liberada en el año 2018 (el proveedor fue Wyscout) y el data set completo fue recopilado por Pappalardo et al.(2019) bajo CC BY 4.0 License para consulta pública, el mismo contiene información de eventos espacio temporales de las 5 principales ligas de fútbol de Europa de la temporada 2017-2018.
+
+Citas:
+
+- Pappalardo et al., (2019) A public data set of spatio-temporal match events in soccer competitions, Nature Scientific Data 6:236, https://www.nature.com/articles/s41597-019-0247-7
+
+- Pappalardo et al. (2019) PlayeRank: Data-driven Performance Evaluation and Player Ranking in Soccer via a Machine Learning Approach. ACM Transactions on Intellingent Systems and Technologies (TIST) 10, 5, Article 59 (September 2019), 27 pages. DOI: https://doi.org/10.1145/3343172
+
+Puedes conseguir el dataset completo y mayor informacióna acerca de la metodología y medición en el siguiente [link](https://figshare.com/collections/Soccer_match_event_dataset/4415000).
+
+La PEC consiste en realizar un análisis visual de los datos del **Real Madrid**. 
+
+
+
+```{r, warning=FALSE, include=FALSE, message=FALSE, echo=FALSE}
+
+### Librerias
+library(forcats)
+library(dplyr)
+library(knitr)
+library(ggplot2)
+library(readr)
+library(kableExtra)
+library(jsonlite)
+library(ggsoccer)
+```
+
+
+```{r readData, echo=FALSE, cache=TRUE}
+eventos <- read.csv("data2/eventosRealMadrid.csv", sep = ";")
+matches <- read.csv("data2/matchesRealMadrid.csv", sep = "|")
+players <- read.csv("data2/playersRealMadrid.csv", sep = "|")
+```
+
+
+# Estadísticas Generales de los eventos
+
+```{r eventos, echo=FALSE, cache=TRUE}
+eventos %>% 
+  group_by(eventName) %>% 
+  summarise(Count = n()) %>%
+  mutate(eventName = fct_reorder(eventName, desc(Count))) %>%
+  arrange(desc(Count )) %>% 
+  ggplot(aes(eventName, Count, fill = eventName, color = eventName)) + 
+  geom_bar(stat = "identity", show.legend = F) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  ggtitle("Frecuencias de los eventos a lo largo de la temporada")
+```
+
+## Análisis de los pases
+
+```{r pases, echo=FALSE, cache=TRUE}
+eventos %>% 
+  filter(eventName == 'Pass') %>%
+  group_by(subEventName) %>% 
+  summarise(Count = n()) %>%
+  mutate(subEventName = fct_reorder(subEventName, desc(Count))) %>%
+  arrange(desc(Count )) %>% 
+  ggplot(aes(subEventName, Count, fill = subEventName, color = subEventName)) + 
+  geom_bar(stat = "identity", show.legend = F) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  ggtitle("Tipos de pases más frecuentes largo de la temporada")
+
+```
+
+```{r Kroos, cache=TRUE, echo=FALSE}
+coordenadas <- eventos %>% filter(playerId == 14723 & eventName == 'Pass') %>% select(Y_init, X_init)
+ggplot(coordenadas)   + 
+  annotate_pitch(colour = "white" , fill = "#7fc47f", limits = FALSE) + theme_pitch() + geom_point(aes(x = Y_init, y = X_init))
+```
+
+
+
+
+
+
+
+
